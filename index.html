@@ -9,29 +9,29 @@
 <meta name="theme-color" content="#0f1117">
 <meta name="description" content="SRTA Bus Schedule - Market Basket & Terminal">
 <title>SRTA Bus</title>
-<link rel="manifest" href="manifest.json">
-<link rel="apple-touch-icon" href="icon-192.png">
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23141829'/><text x='90' y='105' text-anchor='middle' font-size='80' fill='%23818cf8'>🚌</text></svg>">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
-  --bg:#0f1117;--card:#1a1f35;--header:#141829;--border:#252b45;
+  --bg:#0f1117;--bg-card:#1a1f35;--bg-header:#141829;--border:#252b45;
   --text:#e2e8f0;--text2:#94a3b8;--dim:#64748b;
-  --indigo:#818cf8;--blue:#6366f1;--green:#4ade80;--amber:#fbbf24;--red:#f87171;
+  --indigo:#818cf8;--blue:#6366f1;--green:#4ade80;--amber:#fbbf24;--red:#f87171;--purple:#a78bfa;
   --safe-top:env(safe-area-inset-top,20px);
   --safe-bottom:env(safe-area-inset-bottom,0px);
 }
 html,body{
-  font-family:'Inter',-apple-system,BlinkMacSystemFont,'SF Pro Display',system-ui,sans-serif;
+  font-family:-apple-system,BlinkMacSystemFont,'SF Pro Display','Segoe UI',system-ui,sans-serif;
   background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;
   overscroll-behavior:none;
 }
 body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
 
-/* Header */
+/* ---- Header ---- */
 .header{
-  background:var(--header);border-bottom:1px solid rgba(99,102,241,.2);
-  padding:16px 20px 14px;text-align:center;position:sticky;top:0;z-index:10;
+  background:var(--bg-header);
+  border-bottom:1px solid rgba(99,102,241,.2);
+  padding:16px 20px 14px;text-align:center;
+  position:sticky;top:0;z-index:10;
   backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
 }
 .header h1{
@@ -48,27 +48,31 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
 .day-badge.saturday{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.25)}
 .day-badge.sunday{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.25)}
 
-/* Tabs */
+/* ---- Tab Bar ---- */
 .tabs{
   display:flex;gap:0;margin:16px 16px 0;
-  background:var(--card);border-radius:12px;overflow:hidden;border:1px solid var(--border);
+  background:var(--bg-card);border-radius:12px;overflow:hidden;
+  border:1px solid var(--border);
 }
 .tab{
   flex:1;padding:11px 0;text-align:center;font-size:.78rem;font-weight:700;
   color:var(--dim);cursor:pointer;transition:all .2s;letter-spacing:.3px;
   border:none;background:none;-webkit-appearance:none;
 }
-.tab.active{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff}
+.tab.active{
+  background:linear-gradient(135deg,#3b82f6,#6366f1);
+  color:#fff;
+}
 
+/* ---- Container ---- */
 .container{padding:0 16px 100px}
 
-/* Cards */
+/* ---- Card ---- */
 .card{
-  background:var(--card);border:1px solid var(--border);
+  background:var(--bg-card);
+  border:1px solid var(--border);
   border-radius:16px;margin-top:14px;overflow:hidden;
-  transition:transform .15s;
 }
-.card:active{transform:scale(.98)}
 .card-header{
   padding:14px 16px 12px;display:flex;align-items:center;gap:10px;
   border-bottom:1px solid rgba(255,255,255,.05);
@@ -79,41 +83,52 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
 }
 .card-icon.to-term{background:linear-gradient(135deg,#3b82f6,#6366f1)}
 .card-icon.to-mkt{background:linear-gradient(135deg,#10b981,#34d399)}
+.card-icon.to-umass{background:linear-gradient(135deg,#8b5cf6,#a78bfa)}
+.card-icon.from-umass{background:linear-gradient(135deg,#f59e0b,#fbbf24)}
 .card-title{font-size:.82rem;font-weight:700;color:var(--text)}
 .card-sub{font-size:.68rem;color:var(--dim);margin-top:1px}
 .card-body{padding:14px 16px 16px}
+
 .main-label{font-size:.82rem;font-weight:700;color:var(--text2);margin-bottom:2px}
 .next-time{font-size:2.2rem;font-weight:800;color:#f8fafc;letter-spacing:-.5px;line-height:1.1}
-.countdown{font-size:.9rem;font-weight:700;color:var(--green);margin-top:4px;animation:pulse 2s ease-in-out infinite}
+.countdown{font-size:.9rem;font-weight:700;color:var(--green);margin-top:4px}
 .route-badge{
   display:inline-block;margin-top:8px;padding:3px 10px;border-radius:7px;
   font-size:.72rem;font-weight:700;
-  background:rgba(99,102,241,.12);color:var(--indigo);border:1px solid rgba(99,102,241,.2);
+  background:rgba(99,102,241,.12);color:var(--indigo);
+  border:1px solid rgba(99,102,241,.2);
 }
 .no-bus{color:var(--dim);font-size:.85rem;font-style:italic;padding:16px 0}
 
-/* Upcoming */
+/* ---- Upcoming ---- */
 .upcoming{border-top:1px solid rgba(255,255,255,.05);margin-top:12px;padding-top:10px}
-.upcoming-title{font-size:.62rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.upcoming-title{
+  font-size:.62rem;font-weight:700;color:var(--dim);
+  text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;
+}
 .up-row{
   display:flex;justify-content:space-between;align-items:center;
-  padding:6px 8px;border-radius:8px;margin-bottom:2px;background:rgba(255,255,255,.02);
+  padding:6px 8px;border-radius:8px;margin-bottom:2px;
+  background:rgba(255,255,255,.02);
 }
 .up-time{font-size:.85rem;font-weight:700;color:var(--text)}
 .up-route{font-size:.72rem;color:var(--dim);flex:1;text-align:center}
 .up-in{font-size:.72rem;color:var(--dim)}
 
-/* Schedule */
+/* ---- Full Schedule ---- */
+.schedule-section{margin-top:14px}
 .schedule-card{
-  background:var(--card);border:1px solid var(--border);
-  border-radius:16px;overflow:hidden;margin-bottom:12px;margin-top:14px;
+  background:var(--bg-card);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;margin-bottom:12px;
 }
 .schedule-header{
   padding:12px 16px;display:flex;align-items:center;justify-content:space-between;
   cursor:pointer;-webkit-user-select:none;user-select:none;
 }
 .schedule-header h3{font-size:.82rem;font-weight:700;color:var(--text)}
-.schedule-header .arrow{font-size:.7rem;color:var(--dim);transition:transform .2s}
+.schedule-header .arrow{
+  font-size:.7rem;color:var(--dim);transition:transform .2s;
+}
 .schedule-header .arrow.open{transform:rotate(180deg)}
 .schedule-body{display:none;padding:0 16px 12px}
 .schedule-body.open{display:block}
@@ -131,20 +146,11 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
 }
 .sched-row.next-bus-row .time{color:var(--indigo)}
 
-/* Install banner */
-.install-banner{
-  display:none;margin:14px 16px 0;padding:14px 16px;
-  background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(59,130,246,.1));
-  border:1px solid rgba(99,102,241,.3);border-radius:14px;text-align:center;
-}
-.install-banner p{font-size:.78rem;color:var(--text2);line-height:1.5}
-.install-banner .icon{font-size:1.2rem;margin-bottom:4px}
-.install-banner .dismiss{
-  margin-top:8px;padding:6px 16px;border:1px solid var(--border);border-radius:8px;
-  background:none;color:var(--dim);font-size:.72rem;font-weight:600;cursor:pointer;
-}
-
+/* ---- Pulse animation for countdown ---- */
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+.countdown{animation:pulse 2s ease-in-out infinite}
+
+/* ---- Dark scrollbar ---- */
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
 ::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
@@ -157,12 +163,6 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
   <div id="dayBadge"></div>
 </div>
 
-<div class="install-banner" id="installBanner">
-  <div class="icon">📲</div>
-  <p>Tap <strong>Share</strong> ➜ <strong>Add to Home Screen</strong><br>to install as an app</p>
-  <button class="dismiss" onclick="this.parentElement.style.display='none';localStorage.setItem('hideBanner','1')">Got it</button>
-</div>
-
 <div class="tabs">
   <button class="tab active" data-tab="next" id="tabNext">Next Bus</button>
   <button class="tab" data-tab="schedule" id="tabSchedule">Full Schedule</button>
@@ -171,15 +171,13 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
 <div class="container" id="nextView">
   <div class="card" id="card-terminal"></div>
   <div class="card" id="card-market"></div>
-  <div class="card" id="card-umass-out"></div>
-  <div class="card" id="card-umass-in"></div>
 </div>
 
 <div class="container" id="scheduleView" style="display:none"></div>
 
 <script>
 // ============================================================
-// SCHEDULE DATA (fully embedded - no server needed)
+// SCHEDULE DATA
 // ============================================================
 const LEAD=5;
 function p(s){const[t,m]=s.split(':');const[mn,ap]=m.split(' ');let h=parseInt(t);const mi=parseInt(mn);if(ap==='PM'&&h!==12)h+=12;if(ap==='AM'&&h===12)h=0;return h*60+mi}
@@ -195,13 +193,9 @@ const R202_OUT_SAT_DEP=["6:55 AM","7:25 AM","7:55 AM","8:25 AM","8:55 AM","9:25 
 const R211_OUT_SAT_DEP=["8:05 AM","8:35 AM","9:05 AM","9:35 AM","10:05 AM","10:35 AM","11:05 AM","11:35 AM","12:05 PM","12:35 PM","1:05 PM","1:35 PM","2:05 PM","2:35 PM","3:05 PM","3:35 PM","4:05 PM","4:35 PM"];
 
 const R09_OUT_WD_DEP=["6:05 AM", "7:00 AM", "8:00 AM", "9:00 AM", "9:30 AM", "10:00 AM", "10:30 AM", "11:00 AM", "11:30 AM", "12:00 PM", "12:30 PM", "1:00 PM", "1:30 PM", "2:00 PM", "2:30 PM", "3:00 PM", "3:30 PM", "4:00 PM", "4:30 PM", "5:00 PM", "6:00 PM", "7:00 PM", "8:00 PM"];
-const R09_OUT_WD_ARR=["6:22 AM", "7:22 AM", "8:22 AM", "9:22 AM", "9:52 AM", "10:22 AM", "10:52 AM", "11:22 AM", "11:52 AM", "12:22 PM", "12:52 PM", "1:22 PM", "1:52 PM", "2:22 PM", "2:52 PM", "3:22 PM", "3:52 PM", "4:22 PM", "4:52 PM", "5:22 PM", "6:22 PM", "7:22 PM", "8:22 PM"];
 const R09_OUT_SAT_DEP=["8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM", "1:00 PM", "2:00 PM", "3:00 PM", "4:00 PM", "5:00 PM", "6:00 PM"];
-const R09_OUT_SAT_ARR=["8:22 AM", "9:22 AM", "10:22 AM", "11:22 AM", "12:22 PM", "1:22 PM", "2:22 PM", "3:22 PM", "4:22 PM", "5:22 PM", "6:22 PM"];
 const R09_IN_WD_DEP=["7:41 AM", "8:41 AM", "9:41 AM", "10:41 AM", "11:11 AM", "11:41 AM", "12:11 PM", "12:41 PM", "1:11 PM", "1:41 PM", "2:11 PM", "2:41 PM", "3:11 PM", "3:41 PM", "4:11 PM", "4:41 PM", "5:11 PM", "5:41 PM", "6:11 PM", "6:41 PM", "7:41 PM", "8:41 PM", "9:41 PM"];
-const R09_IN_WD_ARR=["7:58 AM", "8:58 AM", "9:58 AM", "10:58 AM", "11:28 AM", "11:58 AM", "12:28 PM", "12:58 PM", "1:28 PM", "1:58 PM", "2:28 PM", "2:58 PM", "3:28 PM", "3:58 PM", "4:28 PM", "4:58 PM", "5:28 PM", "5:58 PM", "6:28 PM", "6:58 PM", "7:58 PM", "8:58 PM", "9:58 PM"];
 const R09_IN_SAT_DEP=["9:41 AM", "10:41 AM", "11:41 AM", "12:41 PM", "1:41 PM", "2:41 PM", "3:41 PM", "4:41 PM", "5:41 PM", "6:41 PM", "7:41 PM"];
-const R09_IN_SAT_ARR=["9:56 AM", "10:56 AM", "11:56 AM", "12:56 PM", "1:56 PM", "2:56 PM", "3:56 PM", "4:56 PM", "5:56 PM", "6:56 PM", "7:56 PM"];
 
 // ============================================================
 // HELPERS
@@ -214,22 +208,23 @@ function findNext(mode){
   if(dt==='sunday')return{day:'sunday',buses:[]};
   const isSat=dt==='saturday';
   let all=[];
+
   if(mode==='terminal'){
     const d202=isSat?R202_IN_SAT:R202_IN_WD;
     const d211=isSat?R211_IN_SAT:R211_IN_WD;
     for(const t of d202){const m=p(t);if(m>=nowM)all.push({route:"Lund's Corner",dep:m,depStr:t})}
     for(const t of d211){const m=p(t);if(m>=nowM)all.push({route:'Fairhaven',dep:m,depStr:t})}
-  } else if(mode==='market') {
+  } else if (mode==='market') {
     const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
     const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
     for(const t of d202){const m=p(t);if(m>=nowM)all.push({route:"Lund's Corner",dep:m,depStr:t})}
     for(const t of d211){const m=p(t);if(m>=nowM)all.push({route:'Fairhaven',dep:m,depStr:t})}
-  } else if(mode==='umass-out') {
+  } else if (mode==='term2umass') {
     const d09=isSat?R09_OUT_SAT_DEP:R09_OUT_WD_DEP;
-    for(const t of d09){const m=p(t);if(m>=nowM)all.push({route:"Rt 9 Intercity",dep:m,depStr:t})}
-  } else if(mode==='umass-in') {
+    for(const t of d09){const m=p(t);if(m>=nowM)all.push({route:'Route 9',dep:m,depStr:t})}
+  } else if (mode==='umass2term') {
     const d09=isSat?R09_IN_SAT_DEP:R09_IN_WD_DEP;
-    for(const t of d09){const m=p(t);if(m>=nowM)all.push({route:"Rt 9 Intercity",dep:m,depStr:t})}
+    for(const t of d09){const m=p(t);if(m>=nowM)all.push({route:'Route 9',dep:m,depStr:t})}
   }
   all.sort((a,b)=>a.dep-b.dep);
   return{day:dt,buses:all};
@@ -245,24 +240,24 @@ function getAllTimes(mode){
     const d211=isSat?R211_IN_SAT:R211_IN_WD;
     for(const t of d202)all.push({route:"Lund's Corner",dep:p(t),depStr:t});
     for(const t of d211)all.push({route:'Fairhaven',dep:p(t),depStr:t});
-  } else if(mode==='market') {
+  } else if (mode==='market') {
     const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
     const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
     for(const t of d202)all.push({route:"Lund's Corner",dep:p(t),depStr:t});
     for(const t of d211)all.push({route:'Fairhaven',dep:p(t),depStr:t});
-  } else if(mode==='umass-out') {
+  } else if (mode==='term2umass') {
     const d09=isSat?R09_OUT_SAT_DEP:R09_OUT_WD_DEP;
-    for(const t of d09)all.push({route:"Rt 9 Intercity",dep:p(t),depStr:t});
-  } else if(mode==='umass-in') {
+    for(const t of d09)all.push({route:'Route 9',dep:p(t),depStr:t});
+  } else if (mode==='umass2term') {
     const d09=isSat?R09_IN_SAT_DEP:R09_IN_WD_DEP;
-    for(const t of d09)all.push({route:"Rt 9 Intercity",dep:p(t),depStr:t});
+    for(const t of d09)all.push({route:'Route 9',dep:p(t),depStr:t});
   }
   all.sort((a,b)=>a.dep-b.dep);
   return all;
 }
 
 // ============================================================
-// CARD RENDERING
+// CARD CONFIGS
 // ============================================================
 const CARDS=[
   {id:'card-terminal',mode:'terminal',icon:'➜',iconCls:'to-term',
@@ -271,18 +266,19 @@ const CARDS=[
   {id:'card-market',mode:'market',icon:'●',iconCls:'to-mkt',
    title:'Terminal → Market Basket',sub:'Bus departs from Terminal',
    label:'Bus leaves Terminal for Market Basket:'},
-  {id:'card-umass-out',mode:'umass-out',icon:'🎓',iconCls:'to-term',
-   title:'Terminal → UMass Dartmouth',sub:'Bus departs from Terminal',
+  {id:'card-term2umass',mode:'term2umass',icon:'🎓',iconCls:'to-umass',
+   title:'Terminal → UMass',sub:'Bus departs from Terminal',
    label:'Bus leaves Terminal for UMass:'},
-  {id:'card-umass-in',mode:'umass-in',icon:'🚌',iconCls:'to-mkt',
-   title:'UMass Dartmouth → Terminal',sub:'Bus departs from UMass Dartmouth',
-   label:'Bus leaves UMass for Terminal:'},
+  {id:'card-umass2term',mode:'umass2term',icon:'🚌',iconCls:'from-umass',
+   title:'UMass → Terminal',sub:'Bus departs from UMass Dartmouth',
+   label:'Bus leaves UMass for Terminal:'}
 ];
 
 function renderCard(cfg){
   const el=document.getElementById(cfg.id);
   const {day,buses}=findNext(cfg.mode);
   const nowM=nowMins();
+
   let html=`<div class="card-header">
     <div class="card-icon ${cfg.iconCls}">${cfg.icon}</div>
     <div><div class="card-title">${cfg.title}</div><div class="card-sub">${cfg.sub}</div></div>
@@ -295,10 +291,12 @@ function renderCard(cfg){
   } else {
     const nxt=buses[0];
     const minsLeft=nxt.dep-nowM;
+
     html+=`<div class="main-label">${cfg.label}</div>`;
     html+=`<div class="next-time">${nxt.depStr}</div>`;
     html+=`<div class="countdown">in ${minsLeft} min${minsLeft!==1?'s':''}</div>`;
     html+=`<span class="route-badge">${nxt.route}</span>`;
+
     if(buses.length>1){
       html+=`<div class="upcoming"><div class="upcoming-title">Coming up</div>`;
       for(let i=1;i<Math.min(5,buses.length);i++){
@@ -318,22 +316,23 @@ function renderCard(cfg){
 }
 
 // ============================================================
-// FULL SCHEDULE
+// FULL SCHEDULE VIEW
 // ============================================================
 function renderSchedule(){
   const sv=document.getElementById('scheduleView');
   const dt=getDayType();
   const nowM=nowMins();
+
   if(dt==='sunday'){
     sv.innerHTML='<div style="text-align:center;padding:40px 0;color:var(--dim)">No service on Sundays</div>';
     return;
   }
+
   const sections=[
-    {mode:'terminal',title:'Market Basket → Terminal'},
-    {mode:'market',title:'Terminal → Market Basket'},
-    {mode:'umass-out',title:'Terminal → UMass Dartmouth'},
-    {mode:'umass-in',title:'UMass Dartmouth → Terminal'},
+    {mode:'terminal',title:'Market Basket → Terminal',label:'Bus leaves Mkt Basket'},
+    {mode:'market',title:'Terminal → Market Basket',label:'Bus leaves Terminal'},
   ];
+
   let html='';
   for(const sec of sections){
     const times=getAllTimes(sec.mode);
@@ -388,26 +387,12 @@ function update(){
   updateClock();
   CARDS.forEach(renderCard);
 }
+
 update();
 setInterval(update,15000);
 
-// Haptic feedback
+// Vibrate on tap for haptic feel (if supported)
 document.addEventListener('click',()=>{if(navigator.vibrate)navigator.vibrate(10)});
-
-// ============================================================
-// SERVICE WORKER & INSTALL BANNER
-// ============================================================
-if('serviceWorker' in navigator){
-  navigator.serviceWorker.register('./sw.js').catch(()=>{});
-}
-
-// Show install hint for Safari (not standalone yet)
-if(!window.navigator.standalone && !localStorage.getItem('hideBanner')){
-  const ua=navigator.userAgent;
-  if(/iPhone|iPad|iPod/.test(ua)){
-    document.getElementById('installBanner').style.display='block';
-  }
-}
 </script>
 </body>
 </html>
