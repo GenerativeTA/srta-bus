@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="SRTA Bus">
+<meta name="theme-color" content="#0f1117">
+<meta name="description" content="SRTA Bus Schedule - Market Basket & Terminal">
+<title>SRTA Bus</title>
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#0f1117;--card:#1a1f35;--header:#141829;--border:#252b45;
+  --text:#e2e8f0;--text2:#94a3b8;--dim:#64748b;
+  --indigo:#818cf8;--blue:#6366f1;--green:#4ade80;--amber:#fbbf24;--red:#f87171;
+  --safe-top:env(safe-area-inset-top,20px);
+  --safe-bottom:env(safe-area-inset-bottom,0px);
+}
+html,body{
+  font-family:'Inter',-apple-system,BlinkMacSystemFont,'SF Pro Display',system-ui,sans-serif;
+  background:var(--bg);color:var(--text);min-height:100vh;min-height:100dvh;
+  overscroll-behavior:none;
+}
+body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
+
+/* Header */
+.header{
+  background:var(--header);border-bottom:1px solid rgba(99,102,241,.2);
+  padding:16px 20px 14px;text-align:center;position:sticky;top:0;z-index:10;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+}
+.header h1{
+  font-size:1.25rem;font-weight:800;letter-spacing:-.3px;
+  background:linear-gradient(135deg,#818cf8,#6366f1,#a78bfa);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.clock{font-size:.82rem;color:var(--text2);margin-top:5px;font-weight:500}
+.day-badge{
+  display:inline-block;margin-top:7px;padding:3px 12px;border-radius:16px;
+  font-size:.68rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
+}
+.day-badge.weekday{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25)}
+.day-badge.saturday{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.25)}
+.day-badge.sunday{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.25)}
+
+/* Tabs */
+.tabs{
+  display:flex;gap:0;margin:16px 16px 0;
+  background:var(--card);border-radius:12px;overflow:hidden;border:1px solid var(--border);
+}
+.tab{
+  flex:1;padding:11px 0;text-align:center;font-size:.78rem;font-weight:700;
+  color:var(--dim);cursor:pointer;transition:all .2s;letter-spacing:.3px;
+  border:none;background:none;-webkit-appearance:none;
+}
+.tab.active{background:linear-gradient(135deg,#3b82f6,#6366f1);color:#fff}
+
+.container{padding:0 16px 100px}
+
+/* Cards */
+.card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;margin-top:14px;overflow:hidden;
+  transition:transform .15s;
+}
+.card:active{transform:scale(.98)}
+.card-header{
+  padding:14px 16px 12px;display:flex;align-items:center;gap:10px;
+  border-bottom:1px solid rgba(255,255,255,.05);
+}
+.card-icon{
+  width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;
+  font-size:1rem;flex-shrink:0;color:#fff;
+}
+.card-icon.to-term{background:linear-gradient(135deg,#3b82f6,#6366f1)}
+.card-icon.to-mkt{background:linear-gradient(135deg,#10b981,#34d399)}
+.card-title{font-size:.82rem;font-weight:700;color:var(--text)}
+.card-sub{font-size:.68rem;color:var(--dim);margin-top:1px}
+.card-body{padding:14px 16px 16px}
+.main-label{font-size:.82rem;font-weight:700;color:var(--text2);margin-bottom:2px}
+.next-time{font-size:2.2rem;font-weight:800;color:#f8fafc;letter-spacing:-.5px;line-height:1.1}
+.countdown{font-size:.9rem;font-weight:700;color:var(--green);margin-top:4px;animation:pulse 2s ease-in-out infinite}
+.route-badge{
+  display:inline-block;margin-top:8px;padding:3px 10px;border-radius:7px;
+  font-size:.72rem;font-weight:700;
+  background:rgba(99,102,241,.12);color:var(--indigo);border:1px solid rgba(99,102,241,.2);
+}
+.no-bus{color:var(--dim);font-size:.85rem;font-style:italic;padding:16px 0}
+
+/* Upcoming */
+.upcoming{border-top:1px solid rgba(255,255,255,.05);margin-top:12px;padding-top:10px}
+.upcoming-title{font-size:.62rem;font-weight:700;color:var(--dim);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px}
+.up-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:6px 8px;border-radius:8px;margin-bottom:2px;background:rgba(255,255,255,.02);
+}
+.up-time{font-size:.85rem;font-weight:700;color:var(--text)}
+.up-route{font-size:.72rem;color:var(--dim);flex:1;text-align:center}
+.up-in{font-size:.72rem;color:var(--dim)}
+
+/* Schedule */
+.schedule-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:16px;overflow:hidden;margin-bottom:12px;margin-top:14px;
+}
+.schedule-header{
+  padding:12px 16px;display:flex;align-items:center;justify-content:space-between;
+  cursor:pointer;-webkit-user-select:none;user-select:none;
+}
+.schedule-header h3{font-size:.82rem;font-weight:700;color:var(--text)}
+.schedule-header .arrow{font-size:.7rem;color:var(--dim);transition:transform .2s}
+.schedule-header .arrow.open{transform:rotate(180deg)}
+.schedule-body{display:none;padding:0 16px 12px}
+.schedule-body.open{display:block}
+.sched-row{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:5px 0;border-bottom:1px solid rgba(255,255,255,.03);
+}
+.sched-row:last-child{border-bottom:none}
+.sched-row .time{font-size:.8rem;font-weight:600;color:var(--text)}
+.sched-row .route{font-size:.72rem;color:var(--dim)}
+.sched-row.past{opacity:.35}
+.sched-row.next-bus-row{
+  background:rgba(99,102,241,.08);border-radius:6px;padding:5px 8px;
+  border-bottom:none;margin:2px -8px;
+}
+.sched-row.next-bus-row .time{color:var(--indigo)}
+
+/* Install banner */
+.install-banner{
+  display:none;margin:14px 16px 0;padding:14px 16px;
+  background:linear-gradient(135deg,rgba(99,102,241,.15),rgba(59,130,246,.1));
+  border:1px solid rgba(99,102,241,.3);border-radius:14px;text-align:center;
+}
+.install-banner p{font-size:.78rem;color:var(--text2);line-height:1.5}
+.install-banner .icon{font-size:1.2rem;margin-bottom:4px}
+.install-banner .dismiss{
+  margin-top:8px;padding:6px 16px;border:1px solid var(--border);border-radius:8px;
+  background:none;color:var(--dim);font-size:.72rem;font-weight:600;cursor:pointer;
+}
+
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.7}}
+::-webkit-scrollbar{width:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:4px}
+</style>
+</head>
+<body>
+<div class="header">
+  <h1>🚌 SRTA Bus</h1>
+  <div class="clock" id="clock"></div>
+  <div id="dayBadge"></div>
+</div>
+
+<div class="install-banner" id="installBanner">
+  <div class="icon">📲</div>
+  <p>Tap <strong>Share</strong> ➜ <strong>Add to Home Screen</strong><br>to install as an app</p>
+  <button class="dismiss" onclick="this.parentElement.style.display='none';localStorage.setItem('hideBanner','1')">Got it</button>
+</div>
+
+<div class="tabs">
+  <button class="tab active" data-tab="next" id="tabNext">Next Bus</button>
+  <button class="tab" data-tab="schedule" id="tabSchedule">Full Schedule</button>
+</div>
+
+<div class="container" id="nextView">
+  <div class="card" id="card-terminal"></div>
+  <div class="card" id="card-market"></div>
+</div>
+
+<div class="container" id="scheduleView" style="display:none"></div>
+
+<script>
+// ============================================================
+// SCHEDULE DATA (fully embedded - no server needed)
+// ============================================================
+const LEAD=5;
+function p(s){const[t,m]=s.split(':');const[mn,ap]=m.split(' ');let h=parseInt(t);const mi=parseInt(mn);if(ap==='PM'&&h!==12)h+=12;if(ap==='AM'&&h===12)h=0;return h*60+mi}
+
+const R202_IN_WD=["6:18 AM","6:42 AM","7:10 AM","7:35 AM","7:55 AM","8:15 AM","8:35 AM","8:55 AM","9:17 AM","9:39 AM","9:59 AM","10:19 AM","10:39 AM","10:59 AM","11:19 AM","11:39 AM","11:59 AM","12:19 PM","12:39 PM","12:59 PM","1:19 PM","1:39 PM","1:59 PM","2:19 PM","2:39 PM","2:59 PM","3:19 PM","3:39 PM","3:59 PM","4:19 PM","4:39 PM","4:59 PM","5:19 PM","5:39 PM","5:59 PM","6:17 PM","6:37 PM","6:57 PM","7:27 PM","7:57 PM","8:27 PM","8:57 PM","9:27 PM"];
+const R202_IN_SAT=["7:36 AM","8:06 AM","8:36 AM","9:06 AM","9:36 AM","10:06 AM","10:36 AM","11:06 AM","11:36 AM","12:06 PM","12:34 PM","1:06 PM","1:36 PM","2:06 PM","2:36 PM","3:06 PM","3:36 PM","4:06 PM","4:36 PM","5:06 PM","5:36 PM","6:06 PM","6:36 PM"];
+const R211_IN_WD=["6:59 AM","7:29 AM","7:59 AM","8:29 AM","8:59 AM","9:29 AM","9:59 AM","10:29 AM","10:59 AM","11:29 AM","11:59 AM","12:29 PM","12:59 PM","1:29 PM","1:59 PM","2:29 PM","2:59 PM","3:29 PM","3:59 PM","4:29 PM","4:59 PM","5:29 PM","5:59 PM","6:29 PM"];
+const R211_IN_SAT=["8:54 AM","9:24 AM","9:54 AM","10:24 AM","10:54 AM","11:24 AM","11:54 AM","12:24 PM","12:54 PM","1:24 PM","1:54 PM","2:24 PM","2:54 PM","3:24 PM","3:54 PM","4:24 PM","4:54 PM","5:24 PM"];
+
+const R202_OUT_WD_DEP=["6:05 AM","6:30 AM","6:55 AM","7:15 AM","7:35 AM","7:55 AM","8:15 AM","8:35 AM","8:55 AM","9:15 AM","9:35 AM","9:55 AM","10:15 AM","10:35 AM","10:55 AM","11:15 AM","11:35 AM","11:55 AM","12:15 PM","12:35 PM","12:55 PM","1:15 PM","1:35 PM","1:55 PM","2:15 PM","2:35 PM","2:55 PM","3:15 PM","3:35 PM","3:55 PM","4:15 PM","4:35 PM","4:55 PM","5:15 PM","5:35 PM","5:55 PM","6:20 PM","6:50 PM","7:20 PM","7:50 PM","8:20 PM","8:50 PM","9:20 PM"];
+const R211_OUT_WD_DEP=["6:05 AM","6:35 AM","7:05 AM","7:35 AM","8:05 AM","8:35 AM","9:05 AM","9:35 AM","10:05 AM","10:35 AM","11:05 AM","11:35 AM","12:05 PM","12:35 PM","1:05 PM","1:35 PM","2:05 PM","2:35 PM","3:05 PM","3:35 PM","4:05 PM","4:35 PM","5:05 PM","5:35 PM"];
+const R202_OUT_SAT_DEP=["6:55 AM","7:25 AM","7:55 AM","8:25 AM","8:55 AM","9:25 AM","9:55 AM","10:25 AM","10:55 AM","11:25 AM","11:55 AM","12:25 PM","12:55 PM","1:25 PM","1:55 PM","2:25 PM","2:55 PM","3:25 PM","3:55 PM","4:25 PM","4:55 PM","5:25 PM","5:55 PM"];
+const R211_OUT_SAT_DEP=["8:05 AM","8:35 AM","9:05 AM","9:35 AM","10:05 AM","10:35 AM","11:05 AM","11:35 AM","12:05 PM","12:35 PM","1:05 PM","1:35 PM","2:05 PM","2:35 PM","3:05 PM","3:35 PM","4:05 PM","4:35 PM"];
+
+// ============================================================
+// HELPERS
+// ============================================================
+function nowMins(){const d=new Date();return d.getHours()*60+d.getMinutes()}
+function getDayType(){const d=new Date().getDay();if(d===0)return'sunday';if(d===6)return'saturday';return'weekday'}
+
+function findNext(mode){
+  const dt=getDayType(),nowM=nowMins();
+  if(dt==='sunday')return{day:'sunday',buses:[]};
+  const isSat=dt==='saturday';
+  let all=[];
+  if(mode==='terminal'){
+    const d202=isSat?R202_IN_SAT:R202_IN_WD;
+    const d211=isSat?R211_IN_SAT:R211_IN_WD;
+    for(const t of d202){const m=p(t);if(m>=nowM)all.push({route:"Lund's Corner",dep:m,depStr:t})}
+    for(const t of d211){const m=p(t);if(m>=nowM)all.push({route:'Fairhaven',dep:m,depStr:t})}
+  } else {
+    const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
+    const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
+    for(const t of d202){const m=p(t);if(m>=nowM)all.push({route:"Lund's Corner",dep:m,depStr:t})}
+    for(const t of d211){const m=p(t);if(m>=nowM)all.push({route:'Fairhaven',dep:m,depStr:t})}
+  }
+  all.sort((a,b)=>a.dep-b.dep);
+  return{day:dt,buses:all};
+}
+
+function getAllTimes(mode){
+  const dt=getDayType();
+  if(dt==='sunday')return[];
+  const isSat=dt==='saturday';
+  let all=[];
+  if(mode==='terminal'){
+    const d202=isSat?R202_IN_SAT:R202_IN_WD;
+    const d211=isSat?R211_IN_SAT:R211_IN_WD;
+    for(const t of d202)all.push({route:"Lund's Corner",dep:p(t),depStr:t});
+    for(const t of d211)all.push({route:'Fairhaven',dep:p(t),depStr:t});
+  } else {
+    const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
+    const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
+    for(const t of d202)all.push({route:"Lund's Corner",dep:p(t),depStr:t});
+    for(const t of d211)all.push({route:'Fairhaven',dep:p(t),depStr:t});
+  }
+  all.sort((a,b)=>a.dep-b.dep);
+  return all;
+}
+
+// ============================================================
+// CARD RENDERING
+// ============================================================
+const CARDS=[
+  {id:'card-terminal',mode:'terminal',icon:'➜',iconCls:'to-term',
+   title:'Market Basket → Terminal',sub:'Bus departs from Market Basket stop',
+   label:'Bus leaves Market Basket for Terminal:'},
+  {id:'card-market',mode:'market',icon:'●',iconCls:'to-mkt',
+   title:'Terminal → Market Basket',sub:'Bus departs from Terminal',
+   label:'Bus leaves Terminal for Market Basket:'},
+];
+
+function renderCard(cfg){
+  const el=document.getElementById(cfg.id);
+  const {day,buses}=findNext(cfg.mode);
+  const nowM=nowMins();
+  let html=`<div class="card-header">
+    <div class="card-icon ${cfg.iconCls}">${cfg.icon}</div>
+    <div><div class="card-title">${cfg.title}</div><div class="card-sub">${cfg.sub}</div></div>
+  </div><div class="card-body">`;
+
+  if(day==='sunday'){
+    html+=`<div class="no-bus">No service on Sundays</div>`;
+  } else if(!buses.length){
+    html+=`<div class="no-bus">No more buses today</div>`;
+  } else {
+    const nxt=buses[0];
+    const minsLeft=nxt.dep-nowM;
+    html+=`<div class="main-label">${cfg.label}</div>`;
+    html+=`<div class="next-time">${nxt.depStr}</div>`;
+    html+=`<div class="countdown">in ${minsLeft} min${minsLeft!==1?'s':''}</div>`;
+    html+=`<span class="route-badge">${nxt.route}</span>`;
+    if(buses.length>1){
+      html+=`<div class="upcoming"><div class="upcoming-title">Coming up</div>`;
+      for(let i=1;i<Math.min(5,buses.length);i++){
+        const b=buses[i];
+        const m=b.dep-nowM;
+        html+=`<div class="up-row">
+          <span class="up-time">${b.depStr}</span>
+          <span class="up-route">${b.route}</span>
+          <span class="up-in">${m} min</span>
+        </div>`;
+      }
+      html+=`</div>`;
+    }
+  }
+  html+=`</div>`;
+  el.innerHTML=html;
+}
+
+// ============================================================
+// FULL SCHEDULE
+// ============================================================
+function renderSchedule(){
+  const sv=document.getElementById('scheduleView');
+  const dt=getDayType();
+  const nowM=nowMins();
+  if(dt==='sunday'){
+    sv.innerHTML='<div style="text-align:center;padding:40px 0;color:var(--dim)">No service on Sundays</div>';
+    return;
+  }
+  const sections=[
+    {mode:'terminal',title:'Market Basket → Terminal'},
+    {mode:'market',title:'Terminal → Market Basket'},
+  ];
+  let html='';
+  for(const sec of sections){
+    const times=getAllTimes(sec.mode);
+    let firstNext=true;
+    html+=`<div class="schedule-card">
+      <div class="schedule-header" onclick="this.querySelector('.arrow').classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
+        <h3>${sec.title}</h3><span class="arrow">▼</span>
+      </div>
+      <div class="schedule-body">`;
+    for(const t of times){
+      const isPast=t.dep<nowM;
+      const isNext=!isPast&&firstNext;
+      if(isNext)firstNext=false;
+      const cls=isPast?'sched-row past':isNext?'sched-row next-bus-row':'sched-row';
+      html+=`<div class="${cls}">
+        <span class="time">${t.depStr}</span>
+        <span class="route">${t.route}</span>
+      </div>`;
+    }
+    html+=`</div></div>`;
+  }
+  sv.innerHTML=html;
+}
+
+// ============================================================
+// TABS
+// ============================================================
+document.querySelectorAll('.tab').forEach(tab=>{
+  tab.addEventListener('click',()=>{
+    document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
+    tab.classList.add('active');
+    const which=tab.dataset.tab;
+    document.getElementById('nextView').style.display=which==='next'?'':'none';
+    document.getElementById('scheduleView').style.display=which==='schedule'?'':'none';
+    if(which==='schedule')renderSchedule();
+  });
+});
+
+// ============================================================
+// CLOCK & UPDATE
+// ============================================================
+function updateClock(){
+  const d=new Date();
+  document.getElementById('clock').textContent=d.toLocaleString('en-US',{weekday:'short',month:'short',day:'numeric',hour:'numeric',minute:'2-digit',hour12:true});
+  const dt=getDayType();
+  const badge=document.getElementById('dayBadge');
+  badge.className='day-badge '+dt;
+  badge.textContent=dt==='weekday'?'Weekday Schedule':dt==='saturday'?'Saturday Schedule':'No Service';
+}
+
+function update(){
+  updateClock();
+  CARDS.forEach(renderCard);
+}
+update();
+setInterval(update,15000);
+
+// Haptic feedback
+document.addEventListener('click',()=>{if(navigator.vibrate)navigator.vibrate(10)});
+
+// ============================================================
+// SERVICE WORKER & INSTALL BANNER
+// ============================================================
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
+
+// Show install hint for Safari (not standalone yet)
+if(!window.navigator.standalone && !localStorage.getItem('hideBanner')){
+  const ua=navigator.userAgent;
+  if(/iPhone|iPad|iPod/.test(ua)){
+    document.getElementById('installBanner').style.display='block';
+  }
+}
+</script>
+</body>
+</html>
