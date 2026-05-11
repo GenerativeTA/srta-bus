@@ -213,13 +213,13 @@ function findNext(mode){
   if(mode==='terminal'){
     const d202=isSat?R202_IN_SAT:R202_IN_WD;
     const d211=isSat?R211_IN_SAT:R211_IN_WD;
-    for(const t of d202){const m=p(t);if(m>=nowM)all.push({route:"Lund's Corner",dep:m,depStr:t})}
-    for(const t of d211){const m=p(t);if(m>=nowM)all.push({route:'Fairhaven',dep:m,depStr:t})}
+    for(const t of d202){const m=p(t);if(m>=nowM)all.push({route:"Lund's Corner",routeNum:202,dep:m,depStr:t})}
+    for(const t of d211){const m=p(t);if(m>=nowM)all.push({route:'Fairhaven',routeNum:211,dep:m,depStr:t})}
   } else if (mode==='market') {
     const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
     const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
-    for(const t of d202){const m=p(t);if(m>=nowM)all.push({route:"Lund's Corner",dep:m,depStr:t})}
-    for(const t of d211){const m=p(t);if(m>=nowM)all.push({route:'Fairhaven',dep:m,depStr:t})}
+    for(const t of d202){const m=p(t);if(m>=nowM)all.push({route:"Lund's Corner",routeNum:202,dep:m,depStr:t})}
+    for(const t of d211){const m=p(t);if(m>=nowM)all.push({route:'Fairhaven',routeNum:211,dep:m,depStr:t})}
   } else if (mode==='term2umass') {
     const d09=isSat?R09_OUT_SAT_DEP:R09_OUT_WD_DEP;
     for(const t of d09){const m=p(t);if(m>=nowM)all.push({route:'Route 9',dep:m,depStr:t})}
@@ -238,13 +238,13 @@ function getAllTimes(mode){
   if(mode==='terminal'){
     const d202=isSat?R202_IN_SAT:R202_IN_WD;
     const d211=isSat?R211_IN_SAT:R211_IN_WD;
-    for(const t of d202)all.push({route:"Lund's Corner",dep:p(t),depStr:t});
-    for(const t of d211)all.push({route:'Fairhaven',dep:p(t),depStr:t});
+    for(const t of d202)all.push({route:"Lund's Corner",routeNum:202,dep:p(t),depStr:t});
+    for(const t of d211)all.push({route:'Fairhaven',routeNum:211,dep:p(t),depStr:t});
   } else if (mode==='market') {
     const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
     const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
-    for(const t of d202)all.push({route:"Lund's Corner",dep:p(t),depStr:t});
-    for(const t of d211)all.push({route:'Fairhaven',dep:p(t),depStr:t});
+    for(const t of d202)all.push({route:"Lund's Corner",routeNum:202,dep:p(t),depStr:t});
+    for(const t of d211)all.push({route:'Fairhaven',routeNum:211,dep:p(t),depStr:t});
   } else if (mode==='term2umass') {
     const d09=isSat?R09_OUT_SAT_DEP:R09_OUT_WD_DEP;
     for(const t of d09)all.push({route:'Route 9',dep:p(t),depStr:t});
@@ -259,19 +259,20 @@ function getAllTimes(mode){
 // ============================================================
 // CARD CONFIGS
 // ============================================================
+function viaStreet(routeNum){return routeNum===202?'Purchase Street':'Acushnet Avenue'}
 const CARDS=[
   {id:'card-terminal',mode:'terminal',icon:'➜',iconCls:'to-term',
    title:'Market Basket → Terminal',sub:'Bus departs from Market Basket stop',
-   label:'Bus leaves Market Basket for Terminal:'},
+   labelFn:(nxt)=>'Bus leaves Market Basket for Terminal via '+viaStreet(nxt.routeNum)+':'},
   {id:'card-market',mode:'market',icon:'●',iconCls:'to-mkt',
    title:'Terminal → Market Basket',sub:'Bus departs from Terminal',
-   label:'Bus leaves Terminal for Market Basket:'},
+   labelFn:(nxt)=>'Bus leaves Terminal for Market Basket via '+viaStreet(nxt.routeNum)+':'},
   {id:'card-term2umass',mode:'term2umass',icon:'🎓',iconCls:'to-umass',
    title:'Terminal → UMass',sub:'Bus departs from Terminal',
-   label:'Bus leaves Terminal for UMass:'},
+   labelFn:()=>'Bus leaves Terminal for UMass:'},
   {id:'card-umass2term',mode:'umass2term',icon:'🚌',iconCls:'from-umass',
    title:'UMass → Terminal',sub:'Bus departs from UMass Dartmouth',
-   label:'Bus leaves UMass for Terminal:'}
+   labelFn:()=>'Bus leaves UMass for Terminal:'}
 ];
 
 function renderCard(cfg){
@@ -290,7 +291,7 @@ function renderCard(cfg){
     const nxt=buses[0];
     const minsLeft=nxt.dep-nowM;
 
-    html+=`<div class="main-label">${cfg.label}</div>`;
+    html+=`<div class="main-label">${cfg.labelFn(nxt)}</div>`;
     html+=`<div class="next-time">${nxt.depStr}</div>`;
     html+=`<div class="countdown">in ${minsLeft} min${minsLeft!==1?'s':''}</div>`;
     html+=`<span class="route-badge">${nxt.route}</span>`;
