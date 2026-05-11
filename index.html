@@ -263,10 +263,10 @@ function viaStreet(routeNum){return routeNum===202?'Purchase Street':'Acushnet A
 const CARDS=[
   {id:'card-terminal',mode:'terminal',icon:'➜',iconCls:'to-term',
    title:'Market Basket → Terminal',sub:'Bus departs from Market Basket stop',
-   labelFn:(nxt)=>'Bus leaves Market Basket for Terminal via '+viaStreet(nxt.routeNum)+':'},
+   labelFn:(nxt)=>'via '+viaStreet(nxt.routeNum)+':'},
   {id:'card-market',mode:'market',icon:'●',iconCls:'to-mkt',
    title:'Terminal → Market Basket',sub:'Bus departs from Terminal',
-   labelFn:(nxt)=>'Bus leaves Terminal for Market Basket via '+viaStreet(nxt.routeNum)+':'},
+   labelFn:(nxt)=>'via '+viaStreet(nxt.routeNum)+':'},
   {id:'card-term2umass',mode:'term2umass',icon:'🎓',iconCls:'to-umass',
    title:'Terminal → UMass',sub:'Bus departs from Terminal',
    labelFn:()=>'Bus leaves Terminal for UMass:'},
