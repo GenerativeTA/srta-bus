@@ -45,8 +45,7 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
   font-size:.68rem;font-weight:700;letter-spacing:.6px;text-transform:uppercase;
 }
 .day-badge.weekday{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.25)}
-.day-badge.saturday{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.25)}
-.day-badge.sunday{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.25)}
+.day-badge.saturday,.day-badge.sunday{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.25)}
 
 /* ---- Tab Bar ---- */
 .tabs{
@@ -171,6 +170,8 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
 <div class="container" id="nextView">
   <div class="card" id="card-terminal"></div>
   <div class="card" id="card-market"></div>
+  <div class="card" id="card-term2umass"></div>
+  <div class="card" id="card-umass2term"></div>
 </div>
 
 <div class="container" id="scheduleView" style="display:none"></div>
@@ -202,11 +203,11 @@ const R09_IN_SAT_DEP=["9:41 AM", "10:41 AM", "11:41 AM", "12:41 PM", "1:41 PM", 
 // ============================================================
 function nowMins(){const d=new Date();return d.getHours()*60+d.getMinutes()}
 function getDayType(){const d=new Date().getDay();if(d===0)return'sunday';if(d===6)return'saturday';return'weekday'}
+function isWeekend(){const dt=getDayType();return dt==='saturday'||dt==='sunday'}
 
 function findNext(mode){
   const dt=getDayType(),nowM=nowMins();
-  if(dt==='sunday')return{day:'sunday',buses:[]};
-  const isSat=dt==='saturday';
+  const isSat=isWeekend();
   let all=[];
 
   if(mode==='terminal'){
@@ -232,8 +233,7 @@ function findNext(mode){
 
 function getAllTimes(mode){
   const dt=getDayType();
-  if(dt==='sunday')return[];
-  const isSat=dt==='saturday';
+  const isSat=isWeekend();
   let all=[];
   if(mode==='terminal'){
     const d202=isSat?R202_IN_SAT:R202_IN_WD;
@@ -284,9 +284,7 @@ function renderCard(cfg){
     <div><div class="card-title">${cfg.title}</div><div class="card-sub">${cfg.sub}</div></div>
   </div><div class="card-body">`;
 
-  if(day==='sunday'){
-    html+=`<div class="no-bus">No service on Sundays</div>`;
-  } else if(!buses.length){
+  if(!buses.length){
     html+=`<div class="no-bus">No more buses today</div>`;
   } else {
     const nxt=buses[0];
@@ -323,14 +321,11 @@ function renderSchedule(){
   const dt=getDayType();
   const nowM=nowMins();
 
-  if(dt==='sunday'){
-    sv.innerHTML='<div style="text-align:center;padding:40px 0;color:var(--dim)">No service on Sundays</div>';
-    return;
-  }
-
   const sections=[
     {mode:'terminal',title:'Market Basket → Terminal',label:'Bus leaves Mkt Basket'},
     {mode:'market',title:'Terminal → Market Basket',label:'Bus leaves Terminal'},
+    {mode:'term2umass',title:'Terminal → UMass Dartmouth',label:'Bus leaves Terminal'},
+    {mode:'umass2term',title:'UMass Dartmouth → Terminal',label:'Bus leaves UMass'},
   ];
 
   let html='';
@@ -380,7 +375,7 @@ function updateClock(){
   const dt=getDayType();
   const badge=document.getElementById('dayBadge');
   badge.className='day-badge '+dt;
-  badge.textContent=dt==='weekday'?'Weekday Schedule':dt==='saturday'?'Saturday Schedule':'No Service';
+  badge.textContent=dt==='weekday'?'Weekday Schedule':'Weekend Schedule';
 }
 
 function update(){
