@@ -280,7 +280,7 @@ function getAllTimes(mode){
 function viaStreet(routeNum){if(routeNum===202)return'Purchase Street';if(routeNum===204)return'Ashley Blvd';return'Acushnet Avenue'}
 const CARDS=[
   {id:'card-terminal',mode:'terminal',icon:'➜',iconCls:'to-term',
-   title:'To Terminal',sub:'From Market Basket & Ashley & Holly',
+   title:'To Terminal',sub:'From Market Basket, Fairhaven & Ashley & Holly',
    labelFn:(nxt)=>'via '+viaStreet(nxt.routeNum)+':'},
   {id:'card-market',mode:'market',icon:'●',iconCls:'to-mkt',
    title:'Terminal → Market Basket',sub:'Bus departs from Terminal',
