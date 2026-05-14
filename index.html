@@ -171,9 +171,9 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
 <div class="container" id="nextView">
   <div class="card" id="card-terminal"></div>
   <div class="card" id="card-market"></div>
+  <div class="card" id="card-term2holly"></div>
   <div class="card" id="card-term2umass"></div>
   <div class="card" id="card-umass2term"></div>
-  <div class="card" id="card-term2holly"></div>
 </div>
 
 <div class="container" id="scheduleView" style="display:none"></div>
@@ -284,15 +284,15 @@ const CARDS=[
   {id:'card-market',mode:'market',icon:'●',iconCls:'to-mkt',
    title:'Terminal → Market Basket',sub:'Bus departs from Terminal',
    labelFn:(nxt)=>'via '+viaStreet(nxt.routeNum)+':'},
+  {id:'card-term2holly',mode:'term2holly',icon:'🏪',iconCls:'to-holly',
+   title:'Terminal → Ashley & Holly',sub:'Bus departs from Terminal',
+   labelFn:()=>'Bus leaves Terminal:'},
   {id:'card-term2umass',mode:'term2umass',icon:'🎓',iconCls:'to-umass',
    title:'Terminal → UMass',sub:'Bus departs from Terminal',
    labelFn:()=>'Bus leaves Terminal for UMass:'},
   {id:'card-umass2term',mode:'umass2term',icon:'🚌',iconCls:'from-umass',
    title:'UMass → Terminal',sub:'Bus departs from UMass Dartmouth',
-   labelFn:()=>'Bus leaves UMass for Terminal:'},
-  {id:'card-term2holly',mode:'term2holly',icon:'🏪',iconCls:'to-holly',
-   title:'Terminal → Ashley & Holly',sub:'Bus departs from Terminal',
-   labelFn:()=>'Bus leaves Terminal:'}
+   labelFn:()=>'Bus leaves UMass for Terminal:'}
 ];
 
 function renderCard(cfg){
@@ -345,9 +345,9 @@ function renderSchedule(){
   const sections=[
     {mode:'terminal',title:'To Terminal',label:'From Market Basket & Ashley & Holly'},
     {mode:'market',title:'Terminal → Market Basket',label:'Bus leaves Terminal'},
+    {mode:'term2holly',title:'Terminal → Ashley & Holly',label:'Bus leaves Terminal'},
     {mode:'term2umass',title:'Terminal → UMass Dartmouth',label:'Bus leaves Terminal'},
     {mode:'umass2term',title:'UMass Dartmouth → Terminal',label:'Bus leaves UMass'},
-    {mode:'term2holly',title:'Terminal → Ashley & Holly',label:'Bus leaves Terminal'},
   ];
 
   let html='';
