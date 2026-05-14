@@ -84,6 +84,7 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
 .card-icon.to-mkt{background:linear-gradient(135deg,#10b981,#34d399)}
 .card-icon.to-umass{background:linear-gradient(135deg,#8b5cf6,#a78bfa)}
 .card-icon.from-umass{background:linear-gradient(135deg,#f59e0b,#fbbf24)}
+.card-icon.to-holly{background:linear-gradient(135deg,#e11d48,#f43f5e)}
 .card-title{font-size:.82rem;font-weight:700;color:var(--text)}
 .card-sub{font-size:.68rem;color:var(--dim);margin-top:1px}
 .card-body{padding:14px 16px 16px}
@@ -172,6 +173,7 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
   <div class="card" id="card-market"></div>
   <div class="card" id="card-term2umass"></div>
   <div class="card" id="card-umass2term"></div>
+  <div class="card" id="card-term2holly"></div>
 </div>
 
 <div class="container" id="scheduleView" style="display:none"></div>
@@ -198,6 +200,11 @@ const R09_OUT_SAT_DEP=["8:00 AM", "9:00 AM", "10:00 AM", "11:00 AM", "12:00 PM",
 const R09_IN_WD_DEP=["7:34 AM", "8:34 AM", "9:34 AM", "10:34 AM", "11:04 AM", "11:34 AM", "12:04 PM", "12:34 PM", "1:04 PM", "1:34 PM", "2:04 PM", "2:34 PM", "3:04 PM", "3:34 PM", "4:04 PM", "4:34 PM", "5:04 PM", "5:34 PM", "6:04 PM", "6:34 PM", "7:34 PM", "8:34 PM", "9:34 PM"];
 const R09_IN_SAT_DEP=["9:34 AM", "10:34 AM", "11:34 AM", "12:34 PM", "1:34 PM", "2:34 PM", "3:34 PM", "4:34 PM", "5:34 PM", "6:34 PM", "7:34 PM"];
 
+const R204_HOLLY_IN_WD=["6:32 AM","6:57 AM","7:19 AM","7:43 AM","8:09 AM","8:39 AM","9:09 AM","9:39 AM","10:09 AM","10:39 AM","11:09 AM","11:39 AM","12:09 PM","12:39 PM","1:09 PM","1:39 PM","2:09 PM","2:34 PM","3:09 PM","3:39 PM","4:09 PM","4:23 PM","4:39 PM","5:09 PM","5:39 PM","6:09 PM","6:39 PM","7:09 PM","7:39 PM","8:09 PM","8:39 PM"];
+const R204_HOLLY_IN_SAT=["8:14 AM","8:44 AM","9:14 AM","9:44 AM","10:14 AM","10:44 AM","11:14 AM","11:44 AM","12:14 PM","12:44 PM","1:14 PM","1:44 PM","2:14 PM","2:44 PM","3:14 PM","3:44 PM","4:14 PM","4:44 PM","5:14 PM","5:44 PM"];
+const R204_TERM_OUT_WD=["5:35 AM","6:00 AM","6:50 AM","7:15 AM","7:40 AM","8:10 AM","8:40 AM","9:10 AM","9:40 AM","10:10 AM","10:40 AM","11:10 AM","11:40 AM","12:10 PM","12:40 PM","1:10 PM","1:40 PM","2:07 PM","2:40 PM","3:10 PM","3:40 PM","4:10 PM","4:40 PM","5:10 PM","5:40 PM","6:10 PM","6:40 PM","7:10 PM","7:40 PM","8:10 PM"];
+const R204_TERM_OUT_SAT=["7:45 AM","8:15 AM","8:45 AM","9:15 AM","9:45 AM","10:15 AM","10:45 AM","11:15 AM","11:45 AM","12:15 PM","12:45 PM","1:15 PM","1:45 PM","2:15 PM","2:45 PM","3:15 PM","3:45 PM","4:15 PM","4:45 PM","5:15 PM"];
+
 // ============================================================
 // HELPERS
 // ============================================================
@@ -213,8 +220,10 @@ function findNext(mode){
   if(mode==='terminal'){
     const d202=isSat?R202_IN_SAT:R202_IN_WD;
     const d211=isSat?R211_IN_SAT:R211_IN_WD;
+    const d204=isSat?R204_HOLLY_IN_SAT:R204_HOLLY_IN_WD;
     for(const t of d202){const m=p(t);if(m>=nowM)all.push({route:"Lund's Corner",routeNum:202,dep:m,depStr:t})}
     for(const t of d211){const m=p(t);if(m>=nowM)all.push({route:'Fairhaven',routeNum:211,dep:m,depStr:t})}
+    for(const t of d204){const m=p(t);if(m>=nowM)all.push({route:'Ashley & Holly',routeNum:204,dep:m,depStr:t})}
   } else if (mode==='market') {
     const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
     const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
@@ -226,6 +235,9 @@ function findNext(mode){
   } else if (mode==='umass2term') {
     const d09=isSat?R09_IN_SAT_DEP:R09_IN_WD_DEP;
     for(const t of d09){const m=p(t);if(m>=nowM)all.push({route:'Route 9',dep:m,depStr:t})}
+  } else if (mode==='term2holly') {
+    const d204=isSat?R204_TERM_OUT_SAT:R204_TERM_OUT_WD;
+    for(const t of d204){const m=p(t);if(m>=nowM)all.push({route:'Route 204',dep:m,depStr:t})}
   }
   all.sort((a,b)=>a.dep-b.dep);
   return{day:dt,buses:all};
@@ -238,8 +250,10 @@ function getAllTimes(mode){
   if(mode==='terminal'){
     const d202=isSat?R202_IN_SAT:R202_IN_WD;
     const d211=isSat?R211_IN_SAT:R211_IN_WD;
+    const d204=isSat?R204_HOLLY_IN_SAT:R204_HOLLY_IN_WD;
     for(const t of d202)all.push({route:"Lund's Corner",routeNum:202,dep:p(t),depStr:t});
     for(const t of d211)all.push({route:'Fairhaven',routeNum:211,dep:p(t),depStr:t});
+    for(const t of d204)all.push({route:'Ashley & Holly',routeNum:204,dep:p(t),depStr:t});
   } else if (mode==='market') {
     const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
     const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
@@ -251,6 +265,9 @@ function getAllTimes(mode){
   } else if (mode==='umass2term') {
     const d09=isSat?R09_IN_SAT_DEP:R09_IN_WD_DEP;
     for(const t of d09)all.push({route:'Route 9',dep:p(t),depStr:t});
+  } else if (mode==='term2holly') {
+    const d204=isSat?R204_TERM_OUT_SAT:R204_TERM_OUT_WD;
+    for(const t of d204)all.push({route:'Route 204',dep:p(t),depStr:t});
   }
   all.sort((a,b)=>a.dep-b.dep);
   return all;
@@ -259,10 +276,10 @@ function getAllTimes(mode){
 // ============================================================
 // CARD CONFIGS
 // ============================================================
-function viaStreet(routeNum){return routeNum===202?'Purchase Street':'Acushnet Avenue'}
+function viaStreet(routeNum){if(routeNum===202)return'Purchase Street';if(routeNum===204)return'Ashley Blvd';return'Acushnet Avenue'}
 const CARDS=[
   {id:'card-terminal',mode:'terminal',icon:'➜',iconCls:'to-term',
-   title:'Market Basket → Terminal',sub:'Bus departs from Market Basket stop',
+   title:'To Terminal',sub:'From Market Basket & Ashley & Holly',
    labelFn:(nxt)=>'via '+viaStreet(nxt.routeNum)+':'},
   {id:'card-market',mode:'market',icon:'●',iconCls:'to-mkt',
    title:'Terminal → Market Basket',sub:'Bus departs from Terminal',
@@ -272,7 +289,10 @@ const CARDS=[
    labelFn:()=>'Bus leaves Terminal for UMass:'},
   {id:'card-umass2term',mode:'umass2term',icon:'🚌',iconCls:'from-umass',
    title:'UMass → Terminal',sub:'Bus departs from UMass Dartmouth',
-   labelFn:()=>'Bus leaves UMass for Terminal:'}
+   labelFn:()=>'Bus leaves UMass for Terminal:'},
+  {id:'card-term2holly',mode:'term2holly',icon:'🏪',iconCls:'to-holly',
+   title:'Terminal → Ashley & Holly',sub:'Bus departs from Terminal',
+   labelFn:()=>'Bus leaves Terminal:'}
 ];
 
 function renderCard(cfg){
@@ -323,10 +343,11 @@ function renderSchedule(){
   const nowM=nowMins();
 
   const sections=[
-    {mode:'terminal',title:'Market Basket → Terminal',label:'Bus leaves Mkt Basket'},
+    {mode:'terminal',title:'To Terminal',label:'From Market Basket & Ashley & Holly'},
     {mode:'market',title:'Terminal → Market Basket',label:'Bus leaves Terminal'},
     {mode:'term2umass',title:'Terminal → UMass Dartmouth',label:'Bus leaves Terminal'},
     {mode:'umass2term',title:'UMass Dartmouth → Terminal',label:'Bus leaves UMass'},
+    {mode:'term2holly',title:'Terminal → Ashley & Holly',label:'Bus leaves Terminal'},
   ];
 
   let html='';
