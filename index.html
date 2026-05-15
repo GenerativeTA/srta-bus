@@ -221,10 +221,8 @@ function findNext(mode){
   if(mode==='terminal'){
     const d202=isSat?R202_IN_SAT:R202_IN_WD;
     const d211=isSat?R211_IN_SAT:R211_IN_WD;
-    const d204=isSat?R204_HOLLY_IN_SAT:R204_HOLLY_IN_WD;
     for(const t of d202){const m=p(t)-LEAD;if(m>=nowM)all.push({route:"Lund's Corner",routeNum:202,dep:m,depStr:fmtMins(m)})}
     for(const t of d211){const m=p(t)-LEAD;if(m>=nowM)all.push({route:'Fairhaven',routeNum:211,dep:m,depStr:fmtMins(m)})}
-    for(const t of d204){const m=p(t)-LEAD;if(m>=nowM)all.push({route:'Ashley & Holly',routeNum:204,dep:m,depStr:fmtMins(m)})}
   } else if (mode==='market') {
     const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
     const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
@@ -251,10 +249,8 @@ function getAllTimes(mode){
   if(mode==='terminal'){
     const d202=isSat?R202_IN_SAT:R202_IN_WD;
     const d211=isSat?R211_IN_SAT:R211_IN_WD;
-    const d204=isSat?R204_HOLLY_IN_SAT:R204_HOLLY_IN_WD;
     for(const t of d202){const m=p(t)-LEAD;all.push({route:"Lund's Corner",routeNum:202,dep:m,depStr:fmtMins(m)})}
     for(const t of d211){const m=p(t)-LEAD;all.push({route:'Fairhaven',routeNum:211,dep:m,depStr:fmtMins(m)})}
-    for(const t of d204){const m=p(t)-LEAD;all.push({route:'Ashley & Holly',routeNum:204,dep:m,depStr:fmtMins(m)})}
   } else if (mode==='market') {
     const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
     const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
@@ -280,7 +276,7 @@ function getAllTimes(mode){
 function viaStreet(routeNum){if(routeNum===202)return'Purchase Street';if(routeNum===204)return'Ashley Blvd';return'Acushnet Avenue'}
 const CARDS=[
   {id:'card-terminal',mode:'terminal',icon:'➜',iconCls:'to-term',
-   title:'To Terminal',sub:'From Market Basket, Fairhaven & Ashley & Holly',
+   title:'Market Basket → Terminal',sub:'Via Lund\'s Corner & Fairhaven',
    labelFn:(nxt)=>'via '+viaStreet(nxt.routeNum)+':'},
   {id:'card-market',mode:'market',icon:'●',iconCls:'to-mkt',
    title:'Terminal → Market Basket',sub:'Bus departs from Terminal',
@@ -344,7 +340,7 @@ function renderSchedule(){
   const nowM=nowMins();
 
   const sections=[
-    {mode:'terminal',title:'To Terminal',label:'From Market Basket & Ashley & Holly'},
+    {mode:'terminal',title:'Market Basket → Terminal',label:'Bus leaves Market Basket'},
     {mode:'market',title:'Terminal → Market Basket',label:'Bus leaves Terminal'},
     {mode:'term2holly',title:'Terminal → Ashley & Holly',label:'Bus leaves Terminal'},
     {mode:'term2umass',title:'Terminal → UMass Dartmouth',label:'Bus leaves Terminal'},
