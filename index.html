@@ -233,19 +233,19 @@ function findNext(mode){
 
   if(mode==='terminal'){
     const d202=isSat?R202_IN_SAT:R202_IN_WD;
-    for(const t of d202){const m=p(t)-LEAD;if(m>=nowM)all.push({route:"Lund's Corner",routeNum:202,dep:m,depStr:fmtMins(m)})}
+    for(const t of d202){const m=p(t)-LEAD;if(m>=nowM)all.push({route:"202 Lund's Corner",routeNum:202,dep:m,depStr:fmtMins(m)})}
     const d204h=isSat?R204_HOLLY_IN_SAT:R204_HOLLY_IN_WD;
-    for(const t of d204h){const m=p(t);if(m>=nowM)all.push({route:'Ashley & Holly',routeNum:204,dep:m,depStr:t})}
+    for(const t of d204h){const m=p(t);if(m>=nowM)all.push({route:'204 Ashley & Holly',routeNum:204,dep:m,depStr:t})}
     const d204d=isSat?R204_DANIEL_IN_SAT:R204_DANIEL_IN_WD;
-    for(const t of d204d){const m=p(t);if(m>=nowM)all.push({route:'Ashley & Daniel',routeNum:204,dep:m,depStr:t})}
+    for(const t of d204d){const m=p(t);if(m>=nowM)all.push({route:'204 Ashley & Daniel',routeNum:204,dep:m,depStr:t})}
   } else if (mode==='acushnet') {
     const d211=isSat?R211_IN_SAT:R211_IN_WD;
-    for(const t of d211){const m=p(t)-LEAD;if(m>=nowM)all.push({route:'Fairhaven',routeNum:211,dep:m,depStr:fmtMins(m)})}
+    for(const t of d211){const m=p(t)-LEAD;if(m>=nowM)all.push({route:'211 Fairhaven',routeNum:211,dep:m,depStr:fmtMins(m)})}
   } else if (mode==='market') {
     const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
     const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
-    for(const t of d202){const m=p(t);if(m>=nowM)all.push({route:"Lund's Corner",routeNum:202,dep:m,depStr:t})}
-    for(const t of d211){const m=p(t);if(m>=nowM)all.push({route:'Fairhaven',routeNum:211,dep:m,depStr:t})}
+    for(const t of d202){const m=p(t);if(m>=nowM)all.push({route:"202 Lund's Corner",routeNum:202,dep:m,depStr:t})}
+    for(const t of d211){const m=p(t);if(m>=nowM)all.push({route:'211 Fairhaven',routeNum:211,dep:m,depStr:t})}
   } else if (mode==='term2ashley') {
     const d204=isSat?R204_TERM_OUT_SAT:R204_TERM_OUT_WD;
     for(const t of d204){const m=p(t);if(m>=nowM)all.push({route:'Route 204',dep:m,depStr:t})}
@@ -272,19 +272,19 @@ function getAllTimes(mode){
   let all=[];
   if(mode==='terminal'){
     const d202=isSat?R202_IN_SAT:R202_IN_WD;
-    for(const t of d202){const m=p(t)-LEAD;all.push({route:"Lund's Corner",routeNum:202,dep:m,depStr:fmtMins(m)})}
+    for(const t of d202){const m=p(t)-LEAD;all.push({route:"202 Lund's Corner",routeNum:202,dep:m,depStr:fmtMins(m)})}
     const d204h=isSat?R204_HOLLY_IN_SAT:R204_HOLLY_IN_WD;
-    for(const t of d204h)all.push({route:'Ashley & Holly',routeNum:204,dep:p(t),depStr:t});
+    for(const t of d204h)all.push({route:'204 Ashley & Holly',routeNum:204,dep:p(t),depStr:t});
     const d204d=isSat?R204_DANIEL_IN_SAT:R204_DANIEL_IN_WD;
-    for(const t of d204d)all.push({route:'Ashley & Daniel',routeNum:204,dep:p(t),depStr:t});
+    for(const t of d204d)all.push({route:'204 Ashley & Daniel',routeNum:204,dep:p(t),depStr:t});
   } else if (mode==='acushnet') {
     const d211=isSat?R211_IN_SAT:R211_IN_WD;
-    for(const t of d211){const m=p(t)-LEAD;all.push({route:'Fairhaven',routeNum:211,dep:m,depStr:fmtMins(m)})}
+    for(const t of d211){const m=p(t)-LEAD;all.push({route:'211 Fairhaven',routeNum:211,dep:m,depStr:fmtMins(m)})}
   } else if (mode==='market') {
     const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
     const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
-    for(const t of d202)all.push({route:"Lund's Corner",routeNum:202,dep:p(t),depStr:t});
-    for(const t of d211)all.push({route:'Fairhaven',routeNum:211,dep:p(t),depStr:t});
+    for(const t of d202)all.push({route:"202 Lund's Corner",routeNum:202,dep:p(t),depStr:t});
+    for(const t of d211)all.push({route:'211 Fairhaven',routeNum:211,dep:p(t),depStr:t});
   } else if (mode==='term2ashley') {
     const d204=isSat?R204_TERM_OUT_SAT:R204_TERM_OUT_WD;
     for(const t of d204)all.push({route:'Route 204',dep:p(t),depStr:t});
