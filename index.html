@@ -81,10 +81,13 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
   font-size:1rem;flex-shrink:0;color:#fff;
 }
 .card-icon.to-term{background:linear-gradient(135deg,#3b82f6,#6366f1)}
-.card-icon.to-home{background:linear-gradient(135deg,#10b981,#34d399)}
-.card-icon.to-mkt{background:linear-gradient(135deg,#e11d48,#f43f5e)}
+.card-icon.to-acush{background:linear-gradient(135deg,#0d9488,#14b8a6)}
+.card-icon.to-mkt{background:linear-gradient(135deg,#10b981,#34d399)}
+.card-icon.to-ashley{background:linear-gradient(135deg,#e11d48,#f43f5e)}
 .card-icon.to-umass{background:linear-gradient(135deg,#8b5cf6,#a78bfa)}
 .card-icon.from-umass{background:linear-gradient(135deg,#f59e0b,#fbbf24)}
+.card-icon.to-fr{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
+.card-icon.from-fr{background:linear-gradient(135deg,#4f46e5,#6366f1)}
 .card-title{font-size:.82rem;font-weight:700;color:var(--text)}
 .card-sub{font-size:.68rem;color:var(--dim);margin-top:1px}
 .card-body{padding:14px 16px 16px}
@@ -170,10 +173,13 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
 
 <div class="container" id="nextView">
   <div class="card" id="card-terminal"></div>
-  <div class="card" id="card-term2home"></div>
+  <div class="card" id="card-acushnet"></div>
   <div class="card" id="card-market"></div>
+  <div class="card" id="card-term2ashley"></div>
   <div class="card" id="card-term2umass"></div>
   <div class="card" id="card-umass2term"></div>
+  <div class="card" id="card-term2fr"></div>
+  <div class="card" id="card-fr2term"></div>
 </div>
 
 <div class="container" id="scheduleView" style="display:none"></div>
@@ -207,6 +213,11 @@ const R204_DANIEL_IN_SAT=["8:21 AM","8:51 AM","9:21 AM","9:51 AM","10:21 AM","10
 const R204_TERM_OUT_WD=["5:35 AM","6:00 AM","6:50 AM","7:15 AM","7:40 AM","8:10 AM","8:40 AM","9:10 AM","9:40 AM","10:10 AM","10:40 AM","11:10 AM","11:40 AM","12:10 PM","12:40 PM","1:10 PM","1:40 PM","2:07 PM","2:40 PM","3:10 PM","3:40 PM","4:10 PM","4:40 PM","5:10 PM","5:40 PM","6:10 PM","6:40 PM","7:10 PM","7:40 PM","8:10 PM"];
 const R204_TERM_OUT_SAT=["7:45 AM","8:15 AM","8:45 AM","9:15 AM","9:45 AM","10:15 AM","10:45 AM","11:15 AM","11:45 AM","12:15 PM","12:45 PM","1:15 PM","1:45 PM","2:15 PM","2:45 PM","3:15 PM","3:45 PM","4:15 PM","4:45 PM","5:15 PM"];
 
+const R9X_OUT_WD_DEP=["6:15 AM","7:15 AM","8:15 AM","9:15 AM","10:15 AM","11:15 AM","12:15 PM","1:15 PM","2:15 PM","3:15 PM","4:15 PM","5:15 PM","6:15 PM","7:15 PM","8:15 PM","9:15 PM"];
+const R9X_OUT_SAT_DEP=["8:15 AM","9:15 AM","10:15 AM","11:15 AM","12:15 PM","1:15 PM","2:15 PM","3:15 PM","4:15 PM","5:15 PM","6:15 PM","7:15 PM"];
+const R9X_IN_WD_DEP=["6:45 AM","7:45 AM","8:45 AM","9:45 AM","10:45 AM","11:45 AM","12:45 PM","1:45 PM","2:45 PM","3:45 PM","4:45 PM","5:45 PM","6:45 PM","7:45 PM","8:45 PM","9:45 PM"];
+const R9X_IN_SAT_DEP=["8:45 AM","9:45 AM","10:45 AM","11:45 AM","12:45 PM","1:45 PM","2:45 PM","3:45 PM","4:45 PM","5:45 PM","6:45 PM","7:45 PM"];
+
 // ============================================================
 // HELPERS
 // ============================================================
@@ -227,24 +238,29 @@ function findNext(mode){
     for(const t of d204h){const m=p(t);if(m>=nowM)all.push({route:'Ashley & Holly',routeNum:204,dep:m,depStr:t})}
     const d204d=isSat?R204_DANIEL_IN_SAT:R204_DANIEL_IN_WD;
     for(const t of d204d){const m=p(t);if(m>=nowM)all.push({route:'Ashley & Daniel',routeNum:204,dep:m,depStr:t})}
-  } else if (mode==='term2home') {
-    const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
-    const d204=isSat?R204_TERM_OUT_SAT:R204_TERM_OUT_WD;
-    const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
-    for(const t of d202){const m=p(t);if(m>=nowM)all.push({route:"Lund's Corner",routeNum:202,dep:m,depStr:t})}
-    for(const t of d204){const m=p(t);if(m>=nowM)all.push({route:'Ashley',routeNum:204,dep:m,depStr:t})}
-    for(const t of d211){const m=p(t);if(m>=nowM)all.push({route:'Fairhaven',routeNum:211,dep:m,depStr:t})}
+  } else if (mode==='acushnet') {
+    const d211=isSat?R211_IN_SAT:R211_IN_WD;
+    for(const t of d211){const m=p(t)-LEAD;if(m>=nowM)all.push({route:'Fairhaven',routeNum:211,dep:m,depStr:fmtMins(m)})}
   } else if (mode==='market') {
     const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
     const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
     for(const t of d202){const m=p(t);if(m>=nowM)all.push({route:"Lund's Corner",routeNum:202,dep:m,depStr:t})}
     for(const t of d211){const m=p(t);if(m>=nowM)all.push({route:'Fairhaven',routeNum:211,dep:m,depStr:t})}
+  } else if (mode==='term2ashley') {
+    const d204=isSat?R204_TERM_OUT_SAT:R204_TERM_OUT_WD;
+    for(const t of d204){const m=p(t);if(m>=nowM)all.push({route:'Route 204',dep:m,depStr:t})}
   } else if (mode==='term2umass') {
     const d09=isSat?R09_OUT_SAT_DEP:R09_OUT_WD_DEP;
     for(const t of d09){const m=p(t);if(m>=nowM)all.push({route:'Route 9',dep:m,depStr:t})}
   } else if (mode==='umass2term') {
     const d09=isSat?R09_IN_SAT_DEP:R09_IN_WD_DEP;
     for(const t of d09){const m=p(t);if(m>=nowM)all.push({route:'Route 9',dep:m,depStr:t})}
+  } else if (mode==='term2fr') {
+    const d9x=isSat?R9X_OUT_SAT_DEP:R9X_OUT_WD_DEP;
+    for(const t of d9x){const m=p(t);if(m>=nowM)all.push({route:'Route 9x',dep:m,depStr:t})}
+  } else if (mode==='fr2term') {
+    const d9x=isSat?R9X_IN_SAT_DEP:R9X_IN_WD_DEP;
+    for(const t of d9x){const m=p(t);if(m>=nowM)all.push({route:'Route 9x',dep:m,depStr:t})}
   }
   all.sort((a,b)=>a.dep-b.dep);
   return{day:dt,buses:all};
@@ -261,24 +277,29 @@ function getAllTimes(mode){
     for(const t of d204h)all.push({route:'Ashley & Holly',routeNum:204,dep:p(t),depStr:t});
     const d204d=isSat?R204_DANIEL_IN_SAT:R204_DANIEL_IN_WD;
     for(const t of d204d)all.push({route:'Ashley & Daniel',routeNum:204,dep:p(t),depStr:t});
-  } else if (mode==='term2home') {
-    const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
-    const d204=isSat?R204_TERM_OUT_SAT:R204_TERM_OUT_WD;
-    const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
-    for(const t of d202)all.push({route:"Lund's Corner",routeNum:202,dep:p(t),depStr:t});
-    for(const t of d204)all.push({route:'Ashley',routeNum:204,dep:p(t),depStr:t});
-    for(const t of d211)all.push({route:'Fairhaven',routeNum:211,dep:p(t),depStr:t});
+  } else if (mode==='acushnet') {
+    const d211=isSat?R211_IN_SAT:R211_IN_WD;
+    for(const t of d211){const m=p(t)-LEAD;all.push({route:'Fairhaven',routeNum:211,dep:m,depStr:fmtMins(m)})}
   } else if (mode==='market') {
     const d202=isSat?R202_OUT_SAT_DEP:R202_OUT_WD_DEP;
     const d211=isSat?R211_OUT_SAT_DEP:R211_OUT_WD_DEP;
     for(const t of d202)all.push({route:"Lund's Corner",routeNum:202,dep:p(t),depStr:t});
     for(const t of d211)all.push({route:'Fairhaven',routeNum:211,dep:p(t),depStr:t});
+  } else if (mode==='term2ashley') {
+    const d204=isSat?R204_TERM_OUT_SAT:R204_TERM_OUT_WD;
+    for(const t of d204)all.push({route:'Route 204',dep:p(t),depStr:t});
   } else if (mode==='term2umass') {
     const d09=isSat?R09_OUT_SAT_DEP:R09_OUT_WD_DEP;
     for(const t of d09)all.push({route:'Route 9',dep:p(t),depStr:t});
   } else if (mode==='umass2term') {
     const d09=isSat?R09_IN_SAT_DEP:R09_IN_WD_DEP;
     for(const t of d09)all.push({route:'Route 9',dep:p(t),depStr:t});
+  } else if (mode==='term2fr') {
+    const d9x=isSat?R9X_OUT_SAT_DEP:R9X_OUT_WD_DEP;
+    for(const t of d9x)all.push({route:'Route 9x',dep:p(t),depStr:t});
+  } else if (mode==='fr2term') {
+    const d9x=isSat?R9X_IN_SAT_DEP:R9X_IN_WD_DEP;
+    for(const t of d9x)all.push({route:'Route 9x',dep:p(t),depStr:t});
   }
   all.sort((a,b)=>a.dep-b.dep);
   return all;
@@ -289,20 +310,29 @@ function getAllTimes(mode){
 // ============================================================
 const CARDS=[
   {id:'card-terminal',mode:'terminal',icon:'➜',iconCls:'to-term',
-   title:'To Terminal',sub:'via Purchase St • Routes 202 & 204',
+   title:'Purchase St → Terminal',sub:'Routes 202 & 204',
    labelFn:(nxt)=>'Bus leaves '+nxt.route+':'},
-  {id:'card-term2home',mode:'term2home',icon:'🏠',iconCls:'to-home',
-   title:'To Home from Terminal',sub:'Routes 202, 204 & 211',
-   labelFn:(nxt)=>'Bus leaves Terminal ('+nxt.route+'):'},
+  {id:'card-acushnet',mode:'acushnet',icon:'➜',iconCls:'to-acush',
+   title:'Acushnet Ave → Terminal',sub:'Route 211 • Fairhaven',
+   labelFn:()=>'Bus leaves Market Basket:'},
   {id:'card-market',mode:'market',icon:'🛒',iconCls:'to-mkt',
-   title:'To Market Basket',sub:'From Home • Routes 202 & 211',
+   title:'Terminal → Market Basket',sub:'Routes 202 & 211',
    labelFn:(nxt)=>'Bus leaves Terminal ('+nxt.route+'):'},
+  {id:'card-term2ashley',mode:'term2ashley',icon:'🏪',iconCls:'to-ashley',
+   title:'Terminal → Ashley',sub:'Route 204',
+   labelFn:()=>'Bus leaves Terminal:'},
   {id:'card-term2umass',mode:'term2umass',icon:'🎓',iconCls:'to-umass',
-   title:'To UMass from Terminal',sub:'Route 9',
+   title:'Terminal → UMass',sub:'Route 9',
    labelFn:()=>'Bus leaves Terminal for UMass:'},
   {id:'card-umass2term',mode:'umass2term',icon:'🚌',iconCls:'from-umass',
-   title:'To Terminal from UMass',sub:'Route 9 via Purchase St',
-   labelFn:()=>'Bus leaves UMass for Terminal:'}
+   title:'UMass → Terminal',sub:'Route 9',
+   labelFn:()=>'Bus leaves UMass for Terminal:'},
+  {id:'card-term2fr',mode:'term2fr',icon:'🌉',iconCls:'to-fr',
+   title:'Terminal → Fall River',sub:'Route 9x Express',
+   labelFn:()=>'Bus leaves Terminal:'},
+  {id:'card-fr2term',mode:'fr2term',icon:'🌉',iconCls:'from-fr',
+   title:'Fall River → Terminal',sub:'Route 9x Express',
+   labelFn:()=>'Bus leaves Fall River:'}
 ];
 
 function renderCard(cfg){
@@ -353,11 +383,14 @@ function renderSchedule(){
   const nowM=nowMins();
 
   const sections=[
-    {mode:'terminal',title:'To Terminal',label:'via Purchase St'},
-    {mode:'term2home',title:'To Home from Terminal',label:'Bus leaves Terminal'},
-    {mode:'market',title:'To Market Basket',label:'Bus leaves Terminal'},
-    {mode:'term2umass',title:'To UMass from Terminal',label:'Bus leaves Terminal'},
-    {mode:'umass2term',title:'To Terminal from UMass',label:'Bus leaves UMass'},
+    {mode:'terminal',title:'Purchase St → Terminal',label:'Routes 202 & 204'},
+    {mode:'acushnet',title:'Acushnet Ave → Terminal',label:'Route 211'},
+    {mode:'market',title:'Terminal → Market Basket',label:'Routes 202 & 211'},
+    {mode:'term2ashley',title:'Terminal → Ashley',label:'Route 204'},
+    {mode:'term2umass',title:'Terminal → UMass',label:'Route 9'},
+    {mode:'umass2term',title:'UMass → Terminal',label:'Route 9'},
+    {mode:'term2fr',title:'Terminal → Fall River',label:'Route 9x'},
+    {mode:'fr2term',title:'Fall River → Terminal',label:'Route 9x'},
   ];
 
   let html='';
