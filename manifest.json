@@ -1,6 +1,6 @@
 {
   "name": "SRTA Bus Schedule",
-  "short_name": "SRTA Bus",
+  "short_name": "SRTA Bus Schedule",
   "description": "Real-time SRTA bus schedule for Market Basket & Terminal routes",
   "start_url": "./index.html",
   "display": "standalone",
