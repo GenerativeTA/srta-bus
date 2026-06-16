@@ -9,7 +9,8 @@
 <meta name="theme-color" content="#0f1117">
 <meta name="description" content="SRTA Bus Schedule - Market Basket & Terminal">
 <title>SRTA Bus</title>
-<link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 180 180'><rect width='180' height='180' rx='40' fill='%23141829'/><text x='90' y='105' text-anchor='middle' font-size='80' fill='%23818cf8'>🚌</text></svg>">
+<link rel="manifest" href="manifest.json">
+<link rel="apple-touch-icon" href="icon-192.png">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 :root{
@@ -453,6 +454,10 @@ setInterval(update,15000);
 
 // Vibrate on tap for haptic feel (if supported)
 document.addEventListener('click',()=>{if(navigator.vibrate)navigator.vibrate(10)});
+
+if('serviceWorker' in navigator){
+  navigator.serviceWorker.register('./sw.js').catch(()=>{});
+}
 </script>
 </body>
 </html>
