@@ -1,5 +1,5 @@
 // SRTA Bus - Service Worker for Offline Support
-const CACHE_NAME = 'srta-bus-cache-v25';
+const CACHE_NAME = 'srta-bus-cache-v26';
 const ASSETS = [
   './',
   './index.html',

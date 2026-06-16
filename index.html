@@ -82,21 +82,9 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
   border-radius:16px;margin-top:14px;overflow:hidden;
 }
 .card-header{
-  padding:14px 16px 12px;display:flex;align-items:center;gap:10px;
+  padding:14px 16px 12px;
   border-bottom:1px solid rgba(255,255,255,.05);
 }
-.card-icon{
-  width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;
-  font-size:1rem;flex-shrink:0;color:#fff;
-}
-.card-icon.to-term{background:linear-gradient(135deg,#3b82f6,#6366f1)}
-.card-icon.to-acush{background:linear-gradient(135deg,#0d9488,#14b8a6)}
-.card-icon.to-mkt{background:linear-gradient(135deg,#10b981,#34d399)}
-.card-icon.to-ashley{background:linear-gradient(135deg,#e11d48,#f43f5e)}
-.card-icon.to-umass{background:linear-gradient(135deg,#8b5cf6,#a78bfa)}
-.card-icon.from-umass{background:linear-gradient(135deg,#f59e0b,#fbbf24)}
-.card-icon.to-fr{background:linear-gradient(135deg,#7c3aed,#a78bfa)}
-.card-icon.from-fr{background:linear-gradient(135deg,#4f46e5,#6366f1)}
 .card-title{font-size:.82rem;font-weight:700;color:var(--text)}
 .card-sub{font-size:.68rem;color:var(--dim);margin-top:1px}
 .card-body{padding:14px 16px 16px}
@@ -319,28 +307,28 @@ function getAllTimes(mode){
 // CARD CONFIGS
 // ============================================================
 const CARDS=[
-  {id:'card-terminal',mode:'terminal',icon:'➜',iconCls:'to-term',
+  {id:'card-terminal',mode:'terminal',
    title:'Purchase St → Terminal',sub:'Routes 202 & 204',
    labelFn:(nxt)=>'Bus leaves '+nxt.route+':'},
-  {id:'card-acushnet',mode:'acushnet',icon:'➜',iconCls:'to-acush',
+  {id:'card-acushnet',mode:'acushnet',
    title:'Acushnet Ave → Terminal',sub:'Route 211 • Fairhaven',
    labelFn:()=>'Bus leaves Market Basket:'},
-  {id:'card-market',mode:'market',icon:'🛒',iconCls:'to-mkt',
+  {id:'card-market',mode:'market',
    title:'Terminal → Market Basket',sub:'Routes 202 & 211',
    labelFn:(nxt)=>'Bus leaves Terminal ('+nxt.route+'):'},
-  {id:'card-term2ashley',mode:'term2ashley',icon:'🏪',iconCls:'to-ashley',
+  {id:'card-term2ashley',mode:'term2ashley',
    title:'Terminal → Ashley',sub:'Route 204',
    labelFn:()=>'Bus leaves Terminal:'},
-  {id:'card-term2umass',mode:'term2umass',icon:'🎓',iconCls:'to-umass',
+  {id:'card-term2umass',mode:'term2umass',
    title:'Terminal → UMass',sub:'Route 9',
    labelFn:()=>'Bus leaves Terminal for UMass:'},
-  {id:'card-umass2term',mode:'umass2term',icon:'🚌',iconCls:'from-umass',
+  {id:'card-umass2term',mode:'umass2term',
    title:'UMass → Terminal',sub:'Route 9',
    labelFn:()=>'Bus leaves UMass for Terminal:'},
-  {id:'card-term2fr',mode:'term2fr',icon:'🌉',iconCls:'to-fr',
+  {id:'card-term2fr',mode:'term2fr',
    title:'Terminal → Fall River',sub:'Route 9x Express',
    labelFn:()=>'Bus leaves Terminal:'},
-  {id:'card-fr2term',mode:'fr2term',icon:'🌉',iconCls:'from-fr',
+  {id:'card-fr2term',mode:'fr2term',
    title:'Fall River → Terminal',sub:'Route 9x Express',
    labelFn:()=>'Bus leaves Fall River:'}
 ];
@@ -351,8 +339,7 @@ function renderCard(cfg){
   const nowM=nowMins();
 
   let html=`<div class="card-header">
-    <div class="card-icon ${cfg.iconCls}">${cfg.icon}</div>
-    <div><div class="card-title">${cfg.title}</div><div class="card-sub">${cfg.sub}</div></div>
+    <div class="card-title">${cfg.title}</div><div class="card-sub">${cfg.sub}</div>
   </div><div class="card-body">`;
 
   if(!buses.length){
