@@ -1,15 +1,18 @@
 // SRTA Bus - Service Worker for Offline Support
-const CACHE_NAME = 'srta-bus-cache-v18';
+const CACHE_NAME = 'srta-bus-cache-v19';
 const ASSETS = [
   './',
   './index.html',
-  './install.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png'
 ];
 
-// Install: cache all assets
+function isInstallPage(url) {
+  return url.includes('install.html');
+}
+
+// Install: cache app assets only (not install.html)
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS))
@@ -27,8 +30,13 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch: network first, fallback to cache (ensures updates always come through)
+// Fetch: install page always from network; app pages network-first
 self.addEventListener('fetch', event => {
+  if (isInstallPage(event.request.url)) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   event.respondWith(
     fetch(event.request)
       .then(response => {
