@@ -92,12 +92,6 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
 .main-label{font-size:.82rem;font-weight:700;color:var(--text2);margin-bottom:2px}
 .next-time{font-size:2.2rem;font-weight:800;color:#f8fafc;letter-spacing:-.5px;line-height:1.1}
 .countdown{font-size:.9rem;font-weight:700;color:var(--green);margin-top:4px}
-.route-badge{
-  display:inline-block;margin-top:8px;padding:3px 10px;border-radius:7px;
-  font-size:.72rem;font-weight:700;
-  background:rgba(99,102,241,.12);color:var(--indigo);
-  border:1px solid rgba(99,102,241,.2);
-}
 .no-bus{color:var(--dim);font-size:.85rem;font-style:italic;padding:16px 0}
 
 /* ---- Upcoming ---- */
@@ -125,11 +119,8 @@ body{padding-top:var(--safe-top);padding-bottom:var(--safe-bottom)}
   padding:12px 16px;display:flex;align-items:center;justify-content:space-between;
   cursor:pointer;-webkit-user-select:none;user-select:none;
 }
-.schedule-header h3{font-size:.82rem;font-weight:700;color:var(--text)}
-.schedule-header .arrow{
-  font-size:.7rem;color:var(--dim);transition:transform .2s;
-}
-.schedule-header .arrow.open{transform:rotate(180deg)}
+.schedule-header h3{font-size:.82rem;font-weight:700;color:var(--text);flex:1}
+.schedule-header .arrow{display:none}
 .schedule-body{display:none;padding:0 16px 12px}
 .schedule-body.open{display:block}
 .sched-row{
@@ -351,7 +342,6 @@ function renderCard(cfg){
     html+=`<div class="main-label">${cfg.labelFn(nxt)}</div>`;
     html+=`<div class="next-time">${nxt.depStr}</div>`;
     html+=`<div class="countdown">in ${minsLeft} min${minsLeft!==1?'s':''}</div>`;
-    html+=`<span class="route-badge">${nxt.route}</span>`;
 
     if(buses.length>1){
       html+=`<div class="upcoming"><div class="upcoming-title">Coming up</div>`;
@@ -395,8 +385,8 @@ function renderSchedule(){
     const times=getAllTimes(sec.mode);
     let firstNext=true;
     html+=`<div class="schedule-card">
-      <div class="schedule-header" onclick="this.querySelector('.arrow').classList.toggle('open');this.nextElementSibling.classList.toggle('open')">
-        <h3>${sec.title}</h3><span class="arrow">▼</span>
+      <div class="schedule-header" onclick="this.nextElementSibling.classList.toggle('open')">
+        <h3>${sec.title}</h3>
       </div>
       <div class="schedule-body">`;
     for(const t of times){
