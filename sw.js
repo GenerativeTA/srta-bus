@@ -1,15 +1,13 @@
 // SRTA Bus - Service Worker for Offline Support
-const CACHE_NAME = 'srta-bus-cache-v28';
+const CACHE_NAME = 'srta-bus-cache-v29';
 const ASSETS = [
-  './',
-  './index.html',
   './manifest.json',
   './icon-192.png',
   './icon-512.png'
 ];
 
-function isInstallPage(url) {
-  return url.includes('install.html');
+function isDynamicPage(url) {
+  return url.includes('install.html') || url.includes('index.html');
 }
 
 // Install: cache app assets only (not install.html)
@@ -30,9 +28,9 @@ self.addEventListener('activate', event => {
   self.clients.claim();
 });
 
-// Fetch: install page always from network; app pages network-first
+// Fetch: HTML pages always from network; other assets network-first
 self.addEventListener('fetch', event => {
-  if (isInstallPage(event.request.url)) {
+  if (isDynamicPage(event.request.url)) {
     event.respondWith(fetch(event.request));
     return;
   }
