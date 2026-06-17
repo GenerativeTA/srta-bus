@@ -84,6 +84,14 @@ button {
   <hr>
 </div>
 
+<div id="windows-card">
+  <h2>Windows: Download App (.exe)</h2>
+  <p>Download the standalone app for Windows 10/11. No browser needed.</p>
+  <p><a href="https://github.com/GenerativeTA/srta-bus/releases/latest/download/SRTA-Bus-Schedule.exe">Download SRTA-Bus-Schedule.exe</a></p>
+  <p>Double-click to run. If Windows SmartScreen appears, choose <strong>More info</strong> → <strong>Run anyway</strong>.</p>
+  <hr>
+</div>
+
 <h2>Share with Others</h2>
 <div class="qr-wrap">
   <img src="https://api.qrserver.com/v1/create-qr-code/?size=180x180&data=https%3A%2F%2Fgenerativeta.github.io%2Fsrta-bus%2Finstall.html" width="180" height="180" alt="QR code to install page">
@@ -97,6 +105,7 @@ button {
 <script>
 const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
 const isAndroid = /Android/.test(navigator.userAgent);
+const isWindows = /Windows/.test(navigator.userAgent);
 
 if (isIOS) {
   document.getElementById('iphone-card').classList.remove('hidden');
@@ -104,6 +113,10 @@ if (isIOS) {
   document.getElementById('android-card').classList.remove('hidden');
 } else {
   document.getElementById('desktop-card').classList.remove('hidden');
+}
+
+if (!isWindows) {
+  document.getElementById('windows-card').classList.add('hidden');
 }
 
 let deferredPrompt = null;
